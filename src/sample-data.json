@@ -1,0 +1,74 @@
+{
+  "coaches": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "rating": 2200,
+      "expertise": "Grandmaster",
+      "location": "New York, USA",
+      "available": true,
+      "specialization": "Opening Theory, Endgames",
+      "bio": "John is a Grandmaster with over 20 years of teaching experience. He specializes in deep opening strategies and endgame techniques.",
+      "contact": {
+        "email": "john.doe@email.com",
+        "phone": "+1-234-567-890"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Emily Clark",
+      "rating": 2100,
+      "expertise": "International Master",
+      "location": "London, UK",
+      "available": true,
+      "specialization": "Tactics, Middlegame",
+      "bio": "Emily is an International Master with a focus on tactical play and strategic middlegame planning.",
+      "contact": {
+        "email": "emily.clark@email.com",
+        "phone": "+44-20-7946-0958"
+      }
+    },
+    {
+      "id": 3,
+      "name": "Raj Patel",
+      "rating": 1900,
+      "expertise": "FIDE Master",
+      "location": "Mumbai, India",
+      "available": false,
+      "specialization": "Pawn Structures, Strategy",
+      "bio": "Raj is a FIDE Master with a deep understanding of pawn structures and strategic play.",
+      "contact": {
+        "email": "raj.patel@email.com",
+        "phone": "+91-22-2809-3486"
+      }
+    },
+    {
+      "id": 4,
+      "name": "Sophia Li",
+      "rating": 2000,
+      "expertise": "Candidate Master",
+      "location": "Sydney, Australia",
+      "available": true,
+      "specialization": "Blitz, Time Management",
+      "bio": "Sophia is a Candidate Master known for her quick thinking and blitz chess skills. She also focuses on time management techniques.",
+      "contact": {
+        "email": "sophia.li@email.com",
+        "phone": "+61-2-9876-5432"
+      }
+    },
+    {
+      "id": 5,
+      "name": "Carlos Ramirez",
+      "rating": 2300,
+      "expertise": "Grandmaster",
+      "location": "Madrid, Spain",
+      "available": true,
+      "specialization": "Advanced Endgames, Tournament Preparation",
+      "bio": "Carlos is a Grandmaster with a wealth of experience preparing students for high-level tournaments. His focus is on endgame mastery and advanced strategies.",
+      "contact": {
+        "email": "carlos.ramirez@email.com",
+        "phone": "+34-91-555-1234"
+      }
+    }
+  ]
+}
