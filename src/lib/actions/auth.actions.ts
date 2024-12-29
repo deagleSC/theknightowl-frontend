@@ -1,11 +1,14 @@
 import { AuthService } from '@/lib/services/auth.service';
 import { useStore } from '@/lib/stores';
+import { CoachProfile, PlayerProfile } from '../types';
+import { AxiosError } from 'axios';
 
 export const AuthActions = {
-  login: async (email: string, password: string) => {
+  login: async (email: string, password: string, onSuccess?: () => void, onError?: (error: AxiosError) => void) => {
     try {
-      const { user, token } = await AuthService.login(email, password)
+      const { user, token } = await AuthService.login(email, password, onError)
       useStore.getState().login(user, token)
+      onSuccess?.()
       return { success: true }
     } catch (error) {
       return { 
@@ -15,10 +18,11 @@ export const AuthActions = {
     }
   },
 
-  logout: async () => {
+  logout: async (onSuccess?: () => void, onError?: (error: AxiosError) => void) => {
     try {
-      await AuthService.logout()
+      await AuthService.logout(onError)
       useStore.getState().logout()
+      onSuccess?.()
       return { success: true }
     } catch (error) {
       return { 
@@ -29,14 +33,14 @@ export const AuthActions = {
   },
 
   register: async (userData: {
-    email: string
-    password: string
-    name: string
     role: 'player' | 'coach' | 'parent'
-  }) => {
+    data: PlayerProfile | CoachProfile
+  }, onSuccess?: () => void, onError?: (error: AxiosError) => void) => {
+    console.log(userData)
     try {
-      const { user, token } = await AuthService.register(userData)
+      const { user, token } = await AuthService.register(userData, onError)
       useStore.getState().login(user, token)
+      onSuccess?.()
       return { success: true }
     } catch (error) {
       return { 

@@ -1,67 +1,44 @@
+import axios, { AxiosError } from 'axios';
 import { API_ROUTES } from '@/lib/config/routes';
-// import type { User } from '@/lib/types';
+import { CoachProfile, PlayerProfile } from '../types';
 
 export const AuthService = {
-  login: async (email: string, password: string) => {
-    const response = await fetch(API_ROUTES.AUTH.LOGIN, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    })
-
-    if (!response.ok) {
-      const error = await response.json()
-      throw new Error(error.message || 'Login failed')
+  login: async (email: string, password: string, onError?: (error: AxiosError) => void) => {
+    try {
+      const { data } = await axios.post(API_ROUTES.AUTH.LOGIN, { email, password });
+      return data;
+    } catch (error: unknown) {
+      onError?.(error as AxiosError);
     }
-
-    return response.json()
   },
 
-  logout: async () => {
-    const response = await fetch(API_ROUTES.AUTH.LOGOUT, {
-      method: 'POST',
-    })
-
-    if (!response.ok) {
-      const error = await response.json()
-      throw new Error(error.message || 'Logout failed')
+  logout: async (onError?: (error: AxiosError) => void) => {
+    try {
+      const { data } = await axios.post(API_ROUTES.AUTH.LOGOUT);
+      return data;
+    } catch (error: unknown) {
+      onError?.(error as AxiosError);
     }
-
-    return response.json()
   },
 
   register: async (userData: {
-    email: string
-    password: string
-    name: string
     role: 'player' | 'coach' | 'parent'
-  }) => {
-    const response = await fetch(API_ROUTES.AUTH.REGISTER, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    })
-
-    if (!response.ok) {
-      const error = await response.json()
-      throw new Error(error.message || 'Registration failed')
+    data: PlayerProfile | CoachProfile
+  }, onError?: (error: AxiosError) => void) => {
+    try {
+      const { data } = await axios.post(API_ROUTES.AUTH.REGISTER, userData);
+      return data;
+    } catch (error: unknown) {
+      onError?.(error as AxiosError);
     }
-
-    return response.json()
   },
 
-  getCurrentUser: async () => {
-    const response = await fetch(API_ROUTES.AUTH.ME)
-
-    if (!response.ok) {
-      const error = await response.json()
-      throw new Error(error.message || 'Failed to get current user')
+  getCurrentUser: async (onError?: (error: AxiosError) => void) => {
+    try {
+      const { data } = await axios.get(API_ROUTES.AUTH.ME);
+      return data;
+    } catch (error: unknown) {
+      onError?.(error as AxiosError);
     }
-
-    return response.json()
   }
 } 

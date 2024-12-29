@@ -24,6 +24,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { CustomSelect } from '@/app/components/core/custom-select';
+import { AuthActions } from '@/lib/actions/auth.actions';
+import { CoachProfile } from '@/lib/types';
+import { AxiosError } from 'axios';
+import { useToast } from '@/hooks/use-toast';
 // import { AGES, COUNTRIES, TIMEZONES } from '@/static/sample-data';
 
 
@@ -99,6 +103,8 @@ export default function SignupCoachPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [progress, setProgress] = useState(0);
   const [selectedDay, setSelectedDay] = useState<string>(DAYS_OF_WEEK[0]);
+
+  const { toast } = useToast();
 
   // Initialize forms first
   const accountForm = useForm({
@@ -210,6 +216,18 @@ export default function SignupCoachPage() {
         ...additionalInfoForm.getValues(),
       };
       console.log(formData);
+      AuthActions.register({
+        role: 'coach',
+        data: formData as unknown as CoachProfile
+      }, 
+      () => {},
+      (error: AxiosError) => {
+        toast({
+          title: "Error", 
+          description: error.message || "An unexpected error occurred",
+          variant: "destructive",
+        });
+      });
     }
   };
 

@@ -17,6 +17,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { AuthActions } from "@/lib/actions/auth.actions";
 import Link from 'next/link';
+import { AxiosError } from "axios";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -29,6 +31,8 @@ const formSchema = z.object({
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+
+  const { toast } = useToast();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -43,24 +47,19 @@ export default function LoginPage() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     console.log(values);
-    AuthActions.login(values.email, values.password);
+    AuthActions.login(values.email, values.password, 
+      () => {},
+      (error: AxiosError) => {
+        toast({
+          title: "Error", 
+          description: error.message || "An unexpected error occurred",
+          variant: "destructive",
+        });
+      });
   }
 
   return (
     <div className="flex items-center justify-evenly h-screen m-0">
-      {/* Video Background Section */}
-      {/* <div className="w-1/2 h-screen mx-0 hidden md:block relative">
-        <video
-          autoPlay
-          muted
-          loop
-          className="absolute top-0 left-0 w-full h-full object-cover"
-        >
-          <source src="/assets/videos/promo.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      </div> */}
-
       {/* Login Form Section */}
       <div className="w-full md:w-1/2 h-screen rounded-lg p-6 flex items-center justify-center">
         <Form {...form}>

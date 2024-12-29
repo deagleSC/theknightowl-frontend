@@ -16,6 +16,10 @@ import { Form } from "@/components/ui/form";
 import { Eye, EyeOff } from 'lucide-react';
 import { Progress } from "@/components/ui/progress";
 import { AGES, COUNTRIES, TIMEZONES } from '@/static/sample-data';
+import { AuthActions } from '@/lib/actions/auth.actions';
+import { PlayerProfile } from '@/lib/types';
+import { AxiosError } from 'axios';
+import { useToast } from '@/hooks/use-toast';
 
 
 // Define the schema for each page
@@ -61,6 +65,8 @@ export default function SignupPlayerPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  const { toast } = useToast();
 
   // Initialize forms first
   const accountForm = useForm({
@@ -140,6 +146,18 @@ export default function SignupPlayerPage() {
       };
       // Handle form submission
       console.log(formData);
+      AuthActions.register({
+        role: 'player',
+        data: formData as PlayerProfile
+      },
+      () => {},
+      (error: AxiosError) => {
+        toast({
+          title: "Error",
+          description: error.message || "An unexpected error occurred",
+          variant: "destructive",
+        });
+      });
     }
   };
 
@@ -150,7 +168,7 @@ export default function SignupPlayerPage() {
   };
 
   return (
-    <div className="mx-auto p-6 flex flex-col gap-5 h-screen w-screen items-center justify-center">
+    <div className="mx-auto p-6 flex flex-col gap-5 min-h-screen w-screen items-center justify-center">
       <div className='w-full max-w-2xl flex flex-col gap-5 p-4 rounded-lg'>
         <div className="w-full flex flex-col gap-2">
           <Progress value={progress} />
