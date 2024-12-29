@@ -1,3 +1,5 @@
+"use client";
+
 import { AppSidebar } from "@/app/components/core/app-sidebar";
 import {
   Breadcrumb,
@@ -13,6 +15,9 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { ModeToggle } from "@/app/components/core/mode-toggle";
+import { useStore } from "@/lib/stores";
+import { useEffect } from "react";
+import { redirect } from "next/navigation";
 
 type AppLayoutProps = {
   children: React.ReactNode;
@@ -25,6 +30,14 @@ type AppLayoutProps = {
 
 export default function AppLayout(props: AppLayoutProps) {
   const { children, breadcrumbData, isLoading } = props;
+
+  const user = useStore((state) => state.auth.user);
+
+  useEffect(() => {
+    if (!user) {
+      redirect("/auth/login");
+    }
+  }, [user]);
 
   return (
     <SidebarProvider>

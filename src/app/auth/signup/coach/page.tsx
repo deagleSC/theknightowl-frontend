@@ -23,6 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { CustomSelect } from '@/app/components/core/custom-select';
 // import { AGES, COUNTRIES, TIMEZONES } from '@/static/sample-data';
 
 
@@ -39,7 +40,7 @@ const accountDetailsSchema = z.object({
 
 const professionalDetailsSchema = z.object({
   chessTitle: z.enum(['GM', 'IM', 'FM', 'NM', 'None']).optional(),
-  experience: z.enum(['less_than_1', '1_to_3', '3_to_5', 'more_than_5'], {
+  experience: z.enum(['experience_under_1', 'experience_1_3', 'experience_3_5', 'experience_over_5'], {
     required_error: "Experience is required"
   }),
   expertise: z.array(
@@ -85,8 +86,16 @@ const TIME_SLOTS = [
   '15:00-16:00', '16:00-17:00', '17:00-18:00'
 ];
 
+const CHESS_TITLES = [
+  { value: 'GM', label: 'Grandmaster' },
+  { value: 'IM', label: 'International Master' },
+  { value: 'FM', label: 'FIDE Master' },
+  { value: 'NM', label: 'National Master' },
+  { value: 'None', label: 'None' }
+];
+
 export default function SignupCoachPage() {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(2);
   const [showPassword, setShowPassword] = useState(false);
   const [progress, setProgress] = useState(0);
   const [selectedDay, setSelectedDay] = useState<string>(DAYS_OF_WEEK[0]);
@@ -105,7 +114,7 @@ export default function SignupCoachPage() {
   const professionalForm = useForm({
     resolver: zodResolver(professionalDetailsSchema),
     defaultValues: {
-      chessTitle: 'None',
+      chessTitle: undefined,
       experience: undefined,
       expertise: []
     }
@@ -311,21 +320,17 @@ export default function SignupCoachPage() {
                 control={professionalForm.control}
                 name="chessTitle"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className='flex flex-col gap-2'>
                     <FormLabel>Chess Title</FormLabel>
                     <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
+                      <CustomSelect 
+                        options={CHESS_TITLES} 
+                        isSearchable={true}
+                        placeholder="Select your chess title"
+                        onChange={field.onChange}
                         defaultValue={field.value}
-                        className="flex flex-col md:flex-row md:items-center gap-5"
-                      >
-                        {['GM', 'IM', 'FM', 'NM', 'None'].map((title) => (
-                          <div className="flex items-center space-x-2" key={title}>
-                            <RadioGroupItem value={title} id={title} />
-                            <Label htmlFor={title}>{title}</Label>
-                          </div>
-                        ))}
-                      </RadioGroup>
+                      />
+
                     </FormControl>
                     <p className="text-sm text-muted-foreground">
                       Select your highest achieved chess title. Select &apos;None&apos; if you don&apos;t have an official title.
@@ -345,13 +350,13 @@ export default function SignupCoachPage() {
                       <RadioGroup
                         onValueChange={field.onChange}
                         defaultValue={field.value}
-                        className="flex flex-col md:flex-row md:items-center gap-3"
+                        className="flex flex-col md:flex-row md:items-center justify-between gap-3"
                       >
                         {[
-                          { value: 'less_than_1', label: 'Less than 1 year' },
-                          { value: '1_to_3', label: '1-3 years' },
-                          { value: '3_to_5', label: '3-5 years' },
-                          { value: 'more_than_5', label: 'More than 5 years' }
+                          { value: 'experience_under_1', label: 'Less than 1 year' },
+                          { value: 'experience_1_3', label: '1-3 years' },
+                          { value: 'experience_3_5', label: '3-5 years' },
+                          { value: 'experience_over_5', label: 'More than 5 years' }
                         ].map((option) => (
                           <div className="flex items-center space-x-2" key={option.value}>
                             <RadioGroupItem value={option.value} id={option.value} />
@@ -374,7 +379,7 @@ export default function SignupCoachPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Areas of Expertise</FormLabel>
-                    <div className="flex flex-wrap gap-4">
+                    <div className="grid grid-cols-3 gap-4">
                       {[
                         { value: 'openings', label: 'Openings' },
                         { value: 'middle_game', label: 'Middle Game' },

@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,6 +15,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AuthActions } from "@/lib/actions/auth.actions";
+import Link from 'next/link';
 
 const formSchema = z.object({
   email: z.string().email({
@@ -42,6 +43,7 @@ export default function LoginPage() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     console.log(values);
+    AuthActions.login(values.email, values.password);
   }
 
   return (
@@ -111,6 +113,12 @@ export default function LoginPage() {
             <Button type="submit" className="w-full">
               Login
             </Button>
+            <div className="text-center text-sm flex items-center justify-center gap-2">
+              Don&apos;t have an account?{" "}
+              <Link href="/auth/signup" className="text-primary hover:text-primary/80">
+                Sign up
+              </Link>
+            </div>
           </form>
         </Form>
       </div>
